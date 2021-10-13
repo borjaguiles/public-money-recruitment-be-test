@@ -36,9 +36,9 @@ namespace VacationRental.Api.Controllers
         }
 
         [HttpPost]
-        public ResourceIdViewModel Post(RentalBindingModel request)
+        public async Task<ResourceIdViewModel> Post(RentalBindingModel request)
         {
-            var key = _mediator.Send(request.ToDomain());
+            var key = await _mediator.Send(request.ToDomain());
 
             return new ResourceIdViewModel()
             {
