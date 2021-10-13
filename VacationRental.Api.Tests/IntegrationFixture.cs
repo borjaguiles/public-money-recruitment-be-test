@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.TestHost;
 using System;
 using System.Net.Http;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
 using Xunit;
 
 namespace VacationRental.Api.Tests
@@ -16,7 +18,7 @@ namespace VacationRental.Api.Tests
         public IntegrationFixture()
         {
             _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-
+            
             Client = _server.CreateClient();
         }
 
@@ -24,6 +26,12 @@ namespace VacationRental.Api.Tests
         {
             Client.Dispose();
             _server.Dispose();
+        }
+
+        public void AddRental(int units)
+        {
+            var repository = (IRentalRepository) _server.Services.GetService(typeof(IRentalRepository));
+            repository.Save(new Rental(units));
         }
     }
 }
