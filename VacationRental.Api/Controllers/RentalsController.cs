@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
 using VacationRental.Domain.Commands.RentalCreation;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
 
 namespace VacationRental.Api.Controllers
 {
@@ -11,23 +13,20 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly IDictionary<int, Rental> _rentals;
+        private readonly IRentalRepository _rentalRepository;
         private readonly RentalCreationCommandHandler _rentalCreationCommandHandler;
 
-        public RentalsController(IDictionary<int, Rental> rentals)
+        public RentalsController(IRentalRepository rentalRepository)
         {
-            _rentals = rentals;
-            _rentalCreationCommandHandler = new RentalCreationCommandHandler(rentals);
+            _rentalRepository = rentalRepository;
+            _rentalCreationCommandHandler = new RentalCreationCommandHandler(rentalRepository);
         }
 
         [HttpGet]
         [Route("{rentalId:int}")]
         public RentalViewModel Get(int rentalId)
         {
-            if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
-
-            var rental = _rentals[rentalId];
+            var rental = _rentalRepository.Get(rentalId);
 
             return new RentalViewModel()
             {

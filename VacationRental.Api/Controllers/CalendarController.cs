@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
 
 namespace VacationRental.Api.Controllers
 {
@@ -10,14 +12,14 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class CalendarController : ControllerBase
     {
-        private readonly IDictionary<int, Rental> _rentals;
+        private readonly IRentalRepository _rentalRepository;
         private readonly IDictionary<int, BookingViewModel> _bookings;
 
         public CalendarController(
-            IDictionary<int, Rental> rentals,
+            IRentalRepository rentalRepository,
             IDictionary<int, BookingViewModel> bookings)
         {
-            _rentals = rentals;
+            _rentalRepository = rentalRepository;
             _bookings = bookings;
         }
 
@@ -26,8 +28,8 @@ namespace VacationRental.Api.Controllers
         {
             if (nights < 0)
                 throw new ApplicationException("Nights must be positive");
-            if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
+
+            _rentalRepository.Get(rentalId);
 
             var result = new CalendarViewModel 
             {

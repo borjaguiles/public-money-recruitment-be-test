@@ -9,6 +9,9 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
+using VacationRental.Infrastructure;
 
 namespace VacationRental.Api
 {
@@ -28,7 +31,10 @@ namespace VacationRental.Api
 
             services.AddSwaggerGen(opts => opts.SwaggerDoc("v1", new OpenApiInfo { Title = "Vacation rental information", Version = "v1" }));
 
-            services.AddSingleton<IDictionary<int, Rental>>(new Dictionary<int, Rental>());
+            services.Scan(scan => scan.FromAssemblyOf<RentalRepository>()
+                .AddClasses()
+                .AsImplementedInterfaces()
+                .WithSingletonLifetime());
             services.AddSingleton<IDictionary<int, BookingViewModel>>(new Dictionary<int, BookingViewModel>());
         }
 

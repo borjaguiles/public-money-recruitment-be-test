@@ -1,4 +1,4 @@
-﻿namespace VacationRental.Domain
+﻿namespace VacationRental.Domain.Entities
 {
     public class Rental
     {
@@ -6,9 +6,8 @@
 
         public int Units { get; set; }
 
-        public Rental(int id, int units)
+        public Rental(int units)
         {
-            Id = id;
             Units = units;
         }
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
 
 namespace VacationRental.Api.Controllers
 {
@@ -10,14 +12,14 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class BookingsController : ControllerBase
     {
-        private readonly IDictionary<int, Rental> _rentals;
+        private readonly IRentalRepository _rentalRepository;
         private readonly IDictionary<int, BookingViewModel> _bookings;
 
         public BookingsController(
-            IDictionary<int, Rental> rentals,
+            IRentalRepository rentalRepository,
             IDictionary<int, BookingViewModel> bookings)
         {
-            _rentals = rentals;
+            _rentalRepository = rentalRepository;
             _bookings = bookings;
         }
 
@@ -36,8 +38,8 @@ namespace VacationRental.Api.Controllers
         {
             if (model.Nights <= 0)
                 throw new ApplicationException("Nigts must be positive");
-            if (!_rentals.ContainsKey(model.RentalId))
-                throw new ApplicationException("Rental not found");
+
+            _rentalRepository.Get(model.RentalId);
 
             for (var i = 0; i < model.Nights; i++)
             {
@@ -52,7 +54,7 @@ namespace VacationRental.Api.Controllers
                         count++;
                     }
                 }
-                if (count >= _rentals[model.RentalId].Units)
+                if (count >= _rentalRepository.Get(model.RentalId).Units)
                     throw new ApplicationException("Not available");
             }
 

@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
+using VacationRental.Domain.Entities;
+using VacationRental.Domain.Repositories;
 
 namespace VacationRental.Domain.Commands.RentalCreation
 {
     public class RentalCreationCommandHandler
     {
-        private readonly IDictionary<int, Rental> _rentals;
+        private readonly IRentalRepository _rentalRepository;
 
-        public RentalCreationCommandHandler(IDictionary<int, Rental> rentals)
+        public RentalCreationCommandHandler(IRentalRepository rentalRepository)
         {
-            _rentals = rentals;
+            _rentalRepository = rentalRepository;
         }
 
         public RentalCreationCommandResponse CreateRental(RentalCreationCommandRequest request)
         {
-            var id = _rentals.Keys.Count + 1;
-
-            _rentals.Add(id, new Rental(id, request.Units));
+            var id = _rentalRepository.Save(new Rental(request.Units));
             return new RentalCreationCommandResponse(id);
         }
     }

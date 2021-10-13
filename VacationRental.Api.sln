@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VacationRental.Api.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacationRental.Domain", "VacationRental.Domain\VacationRental.Domain.csproj", "{B6B0904C-2392-4075-9689-372C0717D135}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacationRental.Infrastructure", "VacationRental.Infrastructure\VacationRental.Infrastructure.csproj", "{C583655C-C94B-4DCB-85E4-7824CDA31D15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B6B0904C-2392-4075-9689-372C0717D135}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6B0904C-2392-4075-9689-372C0717D135}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6B0904C-2392-4075-9689-372C0717D135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C583655C-C94B-4DCB-85E4-7824CDA31D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C583655C-C94B-4DCB-85E4-7824CDA31D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C583655C-C94B-4DCB-85E4-7824CDA31D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C583655C-C94B-4DCB-85E4-7824CDA31D15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
