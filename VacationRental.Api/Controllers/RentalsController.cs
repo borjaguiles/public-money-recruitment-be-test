@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
 using VacationRental.Domain.Commands.RentalCreation;
-using VacationRental.Domain.Entities;
+using VacationRental.Domain.Queries.GetRental;
 using VacationRental.Domain.Repositories;
+using VacationRental.Infrastructure;
 
 namespace VacationRental.Api.Controllers
 {
@@ -13,25 +13,25 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly IRentalRepository _rentalRepository;
         private readonly RentalCreationCommandHandler _rentalCreationCommandHandler;
+        private readonly GetRentalQueryHandler _getRentalQueryHandler;
 
         public RentalsController(IRentalRepository rentalRepository)
         {
-            _rentalRepository = rentalRepository;
             _rentalCreationCommandHandler = new RentalCreationCommandHandler(rentalRepository);
+            _getRentalQueryHandler = new GetRentalQueryHandler(rentalRepository);
         }
 
         [HttpGet]
         [Route("{rentalId:int}")]
         public RentalViewModel Get(int rentalId)
         {
-            var rental = _rentalRepository.Get(rentalId);
+            var response = _getRentalQueryHandler.GetRental(new GetRentalQueryRequest(rentalId));
 
             return new RentalViewModel()
             {
-                Id = rental.Id,
-                Units = rental.Units
+                Id = response.Rental.Id,
+                Units = response.Rental.Units
             };
         }
 
