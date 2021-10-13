@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,7 @@ using VacationRental.Api.Models;
 using VacationRental.Domain;
 using VacationRental.Domain.Commands.RentalCreation;
 using VacationRental.Domain.Entities;
+using VacationRental.Domain.Exceptions;
 using VacationRental.Domain.Repositories;
 using VacationRental.Infrastructure;
 
@@ -20,6 +23,7 @@ namespace VacationRental.Api
 {
     public class Startup
     {
+        public IWebHostEnvironment Environment { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,7 +43,7 @@ namespace VacationRental.Api
                 .AsImplementedInterfaces()
                 .WithSingletonLifetime());
             services.AddSingleton<IDictionary<int, BookingViewModel>>(new Dictionary<int, BookingViewModel>());
-
+            services.AddProblemDetails(pbo => ConfigureProblemDetails(pbo, Environment));
             services.AddControllers();
         }
 
@@ -52,10 +56,16 @@ namespace VacationRental.Api
             }
 
             // By changing from MVC to UseRouting we could, in a future feature, inject here middlewares such as authentication or logging
+            app.UseProblemDetails();
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseSwagger();
             app.UseSwaggerUI(opts => opts.SwaggerEndpoint("/swagger/v1/swagger.json", "VacationRental v1"));
+        }
+
+        public static void ConfigureProblemDetails(ProblemDetailsOptions options, IWebHostEnvironment environment)
+        {
+            options.MapToStatusCode<RentalNotFoundException>(StatusCodes.Status404NotFound);
         }
     }
 }

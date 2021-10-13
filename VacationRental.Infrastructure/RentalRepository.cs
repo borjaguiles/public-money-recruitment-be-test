@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using VacationRental.Domain;
 using VacationRental.Domain.Entities;
+using VacationRental.Domain.Exceptions;
 using VacationRental.Domain.Repositories;
 
 namespace VacationRental.Infrastructure
@@ -25,7 +25,7 @@ namespace VacationRental.Infrastructure
         public Rental Get(int rentalId)
         {
             if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
+                throw new RentalNotFoundException();
 
             return _rentals[rentalId];
         }
