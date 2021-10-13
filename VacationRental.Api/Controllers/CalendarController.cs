@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
+using VacationRental.Domain;
 
 namespace VacationRental.Api.Controllers
 {
@@ -9,11 +10,11 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class CalendarController : ControllerBase
     {
-        private readonly IDictionary<int, RentalViewModel> _rentals;
+        private readonly IDictionary<int, Rental> _rentals;
         private readonly IDictionary<int, BookingViewModel> _bookings;
 
         public CalendarController(
-            IDictionary<int, RentalViewModel> rentals,
+            IDictionary<int, Rental> rentals,
             IDictionary<int, BookingViewModel> bookings)
         {
             _rentals = rentals;
