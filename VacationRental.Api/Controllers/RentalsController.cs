@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
 using VacationRental.Domain;
@@ -13,20 +15,18 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly RentalCreationCommandHandler _rentalCreationCommandHandler;
-        private readonly GetRentalQueryHandler _getRentalQueryHandler;
+        private readonly IMediator _mediator;
 
-        public RentalsController(IRentalRepository rentalRepository)
+        public RentalsController(IMediator mediator)
         {
-            _rentalCreationCommandHandler = new RentalCreationCommandHandler(rentalRepository);
-            _getRentalQueryHandler = new GetRentalQueryHandler(rentalRepository);
+            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("{rentalId:int}")]
-        public RentalViewModel Get(int rentalId)
+        public async Task<RentalViewModel> Get(int rentalId)
         {
-            var response = _getRentalQueryHandler.GetRental(new GetRentalQueryRequest(rentalId));
+            var response = await _mediator.Send(new GetRentalQueryRequest(rentalId));
 
             return new RentalViewModel()
             {
@@ -38,7 +38,7 @@ namespace VacationRental.Api.Controllers
         [HttpPost]
         public ResourceIdViewModel Post(RentalBindingModel request)
         {
-            var key = _rentalCreationCommandHandler.CreateRental(request.ToDomain());
+            var key = _mediator.Send(request.ToDomain());
 
             return new ResourceIdViewModel()
             {

@@ -1,6 +1,8 @@
-﻿namespace VacationRental.Domain.Commands.RentalCreation
+﻿using MediatR;
+
+namespace VacationRental.Domain.Commands.RentalCreation
 {
-    public class RentalCreationCommandRequest
+    public class RentalCreationCommandRequest : IRequest<RentalCreationCommandResponse>
     {
         public int Units { get; }
 
