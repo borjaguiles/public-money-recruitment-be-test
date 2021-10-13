@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,15 @@ namespace VacationRental.Api.Tests.Queries
             var resultRental = JsonConvert.DeserializeObject<RentalViewModel>(json);
             //Assert
             resultRental.Should().BeEquivalentTo(expectedRental);
+        }
+
+        [Fact]
+        public async Task SayThatItDidntFindANonExistentRental()
+        {
+            //Act
+            var result = await _client.GetAsync($"/api/v1/rentals/{1}");
+            //Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }
